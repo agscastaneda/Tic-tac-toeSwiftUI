@@ -31,17 +31,6 @@ struct BoardView: View {
                 }
             }//Horizontal lines
             //End grid
-            //            VStack {
-            //                ForEach(0 ..< sqrMatrixLength ) { item in
-            //                    HStack {
-            //                        ForEach(0 ..< self.sqrMatrixLength) { item in
-            //                            Image("nought")
-            //                                .resizable()
-            //                                .padding()
-            //                        }
-            //                    }
-            //                }
-            //            }//Images
         }//ZStack
             
             .padding(16)
@@ -60,7 +49,7 @@ struct line: View {
 }
 
 struct xoImageView: View {
-    @State var player: Player
+    var player: Player
     var body: some View {
         Image(player.imageName)
         .resizable()

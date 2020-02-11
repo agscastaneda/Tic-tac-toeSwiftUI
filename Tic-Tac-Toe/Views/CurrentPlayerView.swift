@@ -9,23 +9,21 @@
 import SwiftUI
 
 struct CurrentPlayerView: View {
-    @State var currentPlayer: Player
+    @ObservedObject var currentPlayer: SquareModel
     
     var body: some View {
         HStack {
             Text("Current Player: ")
                 .font(Font.custom("JosefinSans-Regular", size: 20))
                 .bold()
-            Image(currentPlayer.imageName)
-                .resizable()
-                .aspectRatio(1, contentMode: .fit)
-                .frame(maxWidth: 25, maxHeight: 25)
+                xoImageView(player: currentPlayer.status)
+                .frame(maxWidth: 40, maxHeight: 40)
         }
     }
 }
 
 struct CurrentPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentPlayerView(currentPlayer: .o).previewLayout(.sizeThatFits)
+        CurrentPlayerView(currentPlayer: SquareModel(status: .x)).previewLayout(.sizeThatFits)
     }
 }

@@ -10,10 +10,11 @@ import Foundation
 import SwiftUI
 import Combine
 
-final class TicTacToeModel: ObservableObject{
+
+class TicTacToeModel{
     
-    @Published var board = [SquareModel]()
-    @Published var activePlayer = Player.x
+    var board = [SquareModel]()
+    var activePlayer = Player.x
     
     private let rowSize:Int
     
@@ -24,17 +25,28 @@ final class TicTacToeModel: ObservableObject{
         }
     }
     
-    func makeMove(index: Int, player:Player) /*-> Bool*/ {
+    func makeMove(index: Int, player:Player) {
+        
         if board[index].status == .empty {
+            #if DEBUG
             print("✅ The Square is empty")
+            #endif
+            let selectionFeedback = UISelectionFeedbackGenerator()
+            selectionFeedback.selectionChanged()
             board[index].status = player
-            print("Square \(index) set to \(board[index].status)")
+            #if DEBUG
+            print("◻️ Square: \(index) set to: \(board[index].status)")
+            #endif
             self.changePlayer()
         }else{
-           print("🚫 Square \(index) alredy filled with: \(board[index].status) ")
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
+            #if DEBUG
+            print("🚫 Square \(index) alredy filled with: \(board[index].status) ")
+            #endif
         }
     }
-
+    
     
     func resetGame() {
         for n in (0 ..< self.rowSize * self.rowSize){
@@ -46,56 +58,56 @@ final class TicTacToeModel: ObservableObject{
         switch self.activePlayer {
         case .x:
             self.activePlayer = .o
-         case .o:
-           self.activePlayer = .x
+        case .o:
+            self.activePlayer = .x
         case .empty:
             break
         }
-        let isGameOver = self.isGameOver()
-        if isGameOver {
-            print("👾 Game Over!!")
-            resetGame()
-        }
     }
     
-    func isGameOver() -> Bool {
-         let isAwinner = checkForWinner()
-            print("❗️ isAwinner: \(isAwinner)")
+    func isGameOver() -> (isGameOver: Bool, winner:Player) {
+        let isAwinner = checkForWinner().isAWinner
         if isAwinner {
-            return true
+            let winner = checkForWinner().player
+            return (isAwinner, winner)
         }else{
             let gameState = board.compactMap({$0.status})
             let hasAllItemsEqual = gameState.dropFirst().allSatisfy({ $0 != Player.empty })
             if hasAllItemsEqual {
+                #if DEBUG
                 print("🙅🏾 Draw!!!")
-                return true
+                #endif
+                return (true,Player.empty)
             }
         }
-        
-        return false
+        return (false,Player.empty)
     }
     
-    func checkForWinner() -> Bool{
+    func checkForWinner() -> (isAWinner:Bool, player:Player){
         let gameState = board.compactMap({$0.status})
-        print("📏\(gameState)")
+        var player = Player.empty
+        #if DEBUG
+        print("📏 \(gameState.compactMap({$0.string}))")
+        #endif
         for combinations in Definitions().winPatterns{
             if gameState[combinations[0]] != Player.empty && gameState[combinations[0]] == gameState[combinations[1]] &&  gameState[combinations[1]] == gameState[combinations[2]]{
                 if gameState[combinations[0]] == Player.x{
-                    print("🎉 ❌ has won!")
+                    player = Player.x
+                    #if DEBUG
+                    print("❌ has won! 🎉 ")
+                    #endif
                 }else{
-                    print("🎉 ⭕️ has won!")
+                    player = Player.o
+                    #if DEBUG
+                    print("⭕️ has won! 🎉 ")
+                    #endif
                 }
-                return true
+                return (true, player)
             }
         }
-        return false
+        return (false, player)
     }
 }
-
-//struct Square{
-//    @State var status: Player
-//}
-
 
 enum Player:UInt8 {
     case empty //0
@@ -110,7 +122,19 @@ enum Player:UInt8 {
         case .x:
             return "cross"
         case .empty:
+            return "empty"
+        }
+    }
+    
+    var string : String{
+        switch self {
+        case .o:
+            return "⭕️"
+        case .x:
+            return "❌"
+        case .empty:
             return ""
         }
     }
+    
 }
