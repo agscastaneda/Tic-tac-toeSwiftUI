@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct CurrentPlayerView: View {
-    var currentPlayer: Player
+    @State var currentPlayer: Player
     
     var body: some View {
         HStack {
@@ -26,6 +26,6 @@ struct CurrentPlayerView: View {
 
 struct CurrentPlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentPlayerView(currentPlayer: Player.x).previewLayout(.sizeThatFits)
+        CurrentPlayerView(currentPlayer: .o).previewLayout(.sizeThatFits)
     }
 }

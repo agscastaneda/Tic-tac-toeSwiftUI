@@ -8,36 +8,100 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-class TicTacToeModel: ObservableObject{
+final class TicTacToeModel: ObservableObject{
     
     @Published var board = [SquareModel]()
+    @Published var activePlayer = Player.x
+    
+    private let rowSize:Int
     
     init(rowSize: Int) {
-        for _ in (0 ..< rowSize * rowSize){
-            board.append(SquareModel())
+        self.rowSize = rowSize
+        for _ in (0 ..< self.rowSize * self.rowSize){
+            board.append(SquareModel(status: .empty))
         }
     }
     
+    func makeMove(index: Int, player:Player) /*-> Bool*/ {
+        if board[index].status == .empty {
+            print("✅ The Square is empty")
+            board[index].status = player
+            print("Square \(index) set to \(board[index].status)")
+            self.changePlayer()
+        }else{
+           print("🚫 Square \(index) alredy filled with: \(board[index].status) ")
+        }
+    }
+
+    
     func resetGame() {
-//        TODO: Reset all squares to empty
+        for n in (0 ..< self.rowSize * self.rowSize){
+            board[n].status = .empty
+        }
     }
     
-    func checkForWinner(){
-//        TODO: Check if there is a winner or draw
+    func changePlayer (){
+        switch self.activePlayer {
+        case .x:
+            self.activePlayer = .o
+         case .o:
+           self.activePlayer = .x
+        case .empty:
+            break
+        }
+        let isGameOver = self.isGameOver()
+        if isGameOver {
+            print("👾 Game Over!!")
+            resetGame()
+        }
+    }
+    
+    func isGameOver() -> Bool {
+         let isAwinner = checkForWinner()
+            print("❗️ isAwinner: \(isAwinner)")
+        if isAwinner {
+            return true
+        }else{
+            let gameState = board.compactMap({$0.status})
+            let hasAllItemsEqual = gameState.dropFirst().allSatisfy({ $0 != Player.empty })
+            if hasAllItemsEqual {
+                print("🙅🏾 Draw!!!")
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func checkForWinner() -> Bool{
+        let gameState = board.compactMap({$0.status})
+        print("📏\(gameState)")
+        for combinations in Definitions().winPatterns{
+            if gameState[combinations[0]] != Player.empty && gameState[combinations[0]] == gameState[combinations[1]] &&  gameState[combinations[1]] == gameState[combinations[2]]{
+                if gameState[combinations[0]] == Player.x{
+                    print("🎉 ❌ has won!")
+                }else{
+                    print("🎉 ⭕️ has won!")
+                }
+                return true
+            }
+        }
+        return false
     }
 }
 
-struct Definitions {
-    let lines: Int = 3
-    let winPatterns = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
-}
+//struct Square{
+//    @State var status: Player
+//}
 
 
-enum Player {
-    case o
+enum Player:UInt8 {
+    case empty //0
     case x
-    case empty
+    case o
+    
     
     var imageName: String {
         switch self {
@@ -50,4 +114,3 @@ enum Player {
         }
     }
 }
-

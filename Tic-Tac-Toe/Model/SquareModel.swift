@@ -8,6 +8,10 @@
 
 import Foundation
 
-class SquareModel{
-     var status: Player = .empty
+ class SquareModel: ObservableObject{
+     @Published var status: Player = .empty
+    
+    init(status: Player) {
+        self.status = status
+    }
 }

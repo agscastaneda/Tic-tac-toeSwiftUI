@@ -10,8 +10,16 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @ObservedObject var boardModel = TicTacToeModel(rowSize: Definitions().lines)
+    @State var boardModel = TicTacToeModel(rowSize: Definitions().lines)
+    @State private var isGameOver = false
 
+    func getIndex(row:Int, col:Int)-> Int{
+        return row * Definitions().lines + col
+    }
+    
+    func squareAction(index:Int){
+        self.boardModel.makeMove(index: index, player: self.boardModel.activePlayer)
+    }
     var body: some View {
         
          VStack {
@@ -24,8 +32,9 @@ struct ContentView: View {
                         HStack {
                             ForEach(0..<Definitions().lines) { col in
                                 ZStack{
-                                    SquareView {
-                                        print("Index pressed: \(row * Definitions().lines + col )")
+                                    SquareView (source: self.$boardModel.board[self.getIndex(row: row, col: col)]){
+                                        let index = self.getIndex(row: row, col: col)
+                                        self.squareAction(index: index)
                                     }
                                 }
                             
@@ -34,9 +43,17 @@ struct ContentView: View {
                     }
                 }.aspectRatio(1, contentMode: .fit)
                 .padding(20)
-                
             }
-            CurrentPlayerView(currentPlayer: Player.o)
+            CurrentPlayerView(currentPlayer: self.boardModel.activePlayer)
+            Spacer()
+            Button(action: {
+                self.boardModel.resetGame()
+            }) {
+                Text("Restart game!")
+                    .font(.system(size: 30))
+                    .fontWeight(.heavy)
+                    .padding(.horizontal)
+            }
             Spacer()
         }.padding(.horizontal)
         
@@ -50,9 +67,10 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 struct SquareView: View {
+    @Binding var source: SquareModel
     var action: () -> Void
     var body: some View {
-            xoImageView(player: .o)
+        xoImageView(player: source.status)
             .gesture(TapGesture().onEnded({ () in
             self.action()
         }))
