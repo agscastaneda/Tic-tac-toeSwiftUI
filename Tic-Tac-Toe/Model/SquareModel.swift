@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+/// Model that represents a square of the board of TicTacToeModel
 class SquareModel: ObservableObject{
     @Published var status: Player = .empty
     

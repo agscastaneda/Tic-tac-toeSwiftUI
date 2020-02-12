@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+// MARK: - BoardView
 struct BoardView: View {
     
     var boardLength : Int?
@@ -38,6 +39,7 @@ struct BoardView: View {
     }
 }
 
+// MARK: - Line
 struct line: View {
     
     var color:Color?
@@ -48,6 +50,7 @@ struct line: View {
     }
 }
 
+// MARK: - xoImageView
 struct xoImageView: View {
     var player: Player
     var body: some View {
@@ -57,7 +60,7 @@ struct xoImageView: View {
             .padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
     }
 }
-
+// MARK: -
 struct Board_Previews: PreviewProvider {
     static var previews: some View {
         BoardView().previewLayout(.sizeThatFits)

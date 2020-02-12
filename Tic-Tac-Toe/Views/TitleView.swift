@@ -25,7 +25,7 @@ struct TitleView: View {
                 .bold()}
     }
 }
-
+// MARK: -
 struct TilteView_Previews: PreviewProvider {
     static var previews: some View {
         TitleView().previewLayout(.sizeThatFits)

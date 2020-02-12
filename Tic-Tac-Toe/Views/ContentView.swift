@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+
+/// Main view of Game
 struct ContentView: View {
     
     @State var boardModel = TicTacToeModel(rowSize: Definitions().lines)
@@ -72,7 +74,7 @@ struct ContentView: View {
         }
     }
 }
-
+// MARK: -
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

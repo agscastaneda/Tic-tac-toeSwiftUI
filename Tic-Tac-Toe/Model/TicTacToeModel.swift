@@ -10,7 +10,8 @@ import Foundation
 import SwiftUI
 import Combine
 
-
+// MARK: - TicTacToeModel
+/// Manage the states of the board and handle the inputs from the Board View
 class TicTacToeModel{
     
     var board = [SquareModel]()
@@ -18,6 +19,9 @@ class TicTacToeModel{
     
     private let rowSize:Int
     
+    
+    /// Init for TicTacToeModel
+    /// - Parameter rowSize: The size of row (E.g rowSize = 3 will build an array of 9)
     init(rowSize: Int) {
         self.rowSize = rowSize
         for _ in (0 ..< self.rowSize * self.rowSize){
@@ -25,6 +29,11 @@ class TicTacToeModel{
         }
     }
     
+    
+    /// Reflects the input of the user in board
+    /// - Parameters:
+    ///   - index: The index of the square
+    ///   - player: The status to set in the Square
     func makeMove(index: Int, player:Player) {
         
         if board[index].status == .empty {
@@ -48,12 +57,15 @@ class TicTacToeModel{
     }
     
     
+    /// Resets all the squares of the board to Player.empty
     func resetGame() {
         for n in (0 ..< self.rowSize * self.rowSize){
             board[n].status = .empty
         }
     }
     
+    
+    /// Toggles between players .x and .o
     func changePlayer (){
         switch self.activePlayer {
         case .x:
@@ -65,6 +77,9 @@ class TicTacToeModel{
         }
     }
     
+    
+    
+    /// Check if one of the players has won or if its a draw.
     func isGameOver() -> (isGameOver: Bool, winner:Player) {
         let isAwinner = checkForWinner().isAWinner
         if isAwinner {
@@ -83,6 +98,8 @@ class TicTacToeModel{
         return (false,Player.empty)
     }
     
+    
+    /// Check if one of the players wins and return true, otherwise return false and .empty
     func checkForWinner() -> (isAWinner:Bool, player:Player){
         let gameState = board.compactMap({$0.status})
         var player = Player.empty
@@ -109,7 +126,11 @@ class TicTacToeModel{
     }
 }
 
+// MARK: - Player Enum
+
+/// Player Enum
 enum Player:UInt8 {
+    
     case empty //0
     case x
     case o

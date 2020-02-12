@@ -22,6 +22,7 @@ struct CurrentPlayerView: View {
     }
 }
 
+// MARK: -
 struct CurrentPlayerView_Previews: PreviewProvider {
     static var previews: some View {
         CurrentPlayerView(currentPlayer: SquareModel(status: .x)).previewLayout(.sizeThatFits)
