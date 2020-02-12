@@ -13,7 +13,7 @@ struct ContentView: View {
     @State var boardModel = TicTacToeModel(rowSize: Definitions().lines)
     @State private var isGameOver = false
     @State var activePlayer = Player.x
-
+    
     func getIndex(row:Int, col:Int)-> Int{
         return row * Definitions().lines + col
     }
@@ -29,7 +29,7 @@ struct ContentView: View {
     }
     var body: some View {
         
-         VStack {
+        VStack {
             Spacer()
             TitleView()
             ZStack{
@@ -48,7 +48,7 @@ struct ContentView: View {
                         }
                     }
                 }.aspectRatio(1, contentMode: .fit)
-                .padding(20)
+                    .padding(20)
             }
             CurrentPlayerView(currentPlayer: SquareModel(status: self.activePlayer))
             Spacer()
@@ -64,12 +64,12 @@ struct ContentView: View {
         }.padding(.horizontal)
             .onAppear{
                 self.activePlayer = self.boardModel.activePlayer
-            }
-         .alert(isPresented: $isGameOver) {
+        }
+        .alert(isPresented: $isGameOver) {
             Alert(title: Text("Game Over"), message: Text(self.boardModel.isGameOver().winner != Player.empty ? "\n\nPlayer \(self.boardModel.isGameOver().winner.string) Wins!" :"\n\nIt's a Draw 🙅🏾!" ), dismissButton: .default(Text("OK")){
-            self.boardModel.resetGame()
-            })
-         }
+                self.boardModel.resetGame()
+                })
+        }
     }
 }
 
