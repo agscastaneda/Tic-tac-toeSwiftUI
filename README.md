@@ -6,7 +6,7 @@ A simple Tic-Tac-Toe game to practice SwiftUI
 
 #### TODO:
 
-* P1 vs NPC (Minimax)
+* P1 vs NPC (Minimax) 📌(Ongoing)
 	* Easy
 	* Medium
 	* Hard
