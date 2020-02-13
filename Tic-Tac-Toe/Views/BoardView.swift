@@ -19,14 +19,14 @@ struct BoardView: View {
             //Start Grid
             VStack {
                 Spacer()
-                ForEach(0 ..< (boardLength ?? 3) - 1) { item in
+                ForEach(0 ..< (boardLength ?? boardLength ?? 3) - 1) { item in
                     line(color: Color.gray)
                     Spacer()
                 }
             }//Vertical lines
             HStack {
                 Spacer()
-                ForEach(0 ..< (boardLength ?? 3) - 1) { item in
+                ForEach(0 ..< (boardLength ?? boardLength ?? 3) - 1) { item in
                     line(color: Color.gray)
                     Spacer()
                 }
