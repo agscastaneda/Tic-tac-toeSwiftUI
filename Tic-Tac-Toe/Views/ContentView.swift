@@ -12,9 +12,10 @@ import SwiftUI
 /// Main view of Game
 struct ContentView: View {
     
-    @State var boardModel = TicTacToeModel(rowSize: Definitions().lines)
+    @State var boardModel = TicTacToeModel(rowSize: Definitions().lines, enableAI: true) // Here we create the board
     @State private var isGameOver = false
     @State var activePlayer = Player.x
+    @State var isNPCEnable = true
     
     func getIndex(row:Int, col:Int)-> Int{
         return row * Definitions().lines + col
@@ -22,18 +23,24 @@ struct ContentView: View {
     
     func squareAction(index:Int){
         self.boardModel.makeMove(index: index, player: self.boardModel.activePlayer)
-        self.activePlayer = self.boardModel.activePlayer
+        
         self.isGameOver = self.boardModel.isGameOver().isGameOver
-        if self.isGameOver {
+        
+        if(!self.isGameOver && self.boardModel.activePlayer == .o){
+            self.boardModel.makeNPCMove(player: .o)
+            self.isGameOver = self.boardModel.isGameOver().isGameOver
+        }else{
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.warning)
         }
+        self.activePlayer = self.boardModel.activePlayer
     }
     var body: some View {
         
         VStack {
             Spacer()
             TitleView()
+            Text("The NPC is: \(self.isNPCEnable ? "ON": "OFF")")
             ZStack{
                 BoardView()
                 VStack{
@@ -55,13 +62,37 @@ struct ContentView: View {
             CurrentPlayerView(currentPlayer: SquareModel(status: self.activePlayer))
             Spacer()
             Button(action: {
-                self.boardModel.resetGame()
+                self.boardModel.resetGame(enableNPC: self.isNPCEnable)
             }) {
                 Text("Restart game!")
                     .font(.system(size: 30))
                     .fontWeight(.heavy)
                     .padding(.horizontal)
             }
+            Divider()
+            HStack{
+                Button(action: {
+                    self.isNPCEnable = false
+                    self.boardModel.resetGame(enableNPC:  self.isNPCEnable)
+                    self.activePlayer = self.boardModel.activePlayer
+                }) {
+                    Text("1P vs 2P")
+                        .font(.system(size: 20))
+                        .fontWeight(.heavy)
+                        .padding(.horizontal)
+                }
+                Button(action: {
+                    self.isNPCEnable = true
+                    self.boardModel.resetGame(enableNPC:  self.isNPCEnable)
+                    self.activePlayer = self.boardModel.activePlayer
+                }) {
+                    Text("1P vs Phone")
+                        .font(.system(size: 20))
+                        .fontWeight(.heavy)
+                        .padding(.horizontal)
+                }
+            }
+            
             Spacer()
         }.padding(.horizontal)
             .onAppear{
@@ -69,7 +100,8 @@ struct ContentView: View {
         }
         .alert(isPresented: $isGameOver) {
             Alert(title: Text("Game Over"), message: Text(self.boardModel.isGameOver().winner != Player.empty ? "\n\nPlayer \(self.boardModel.isGameOver().winner.string) Wins!" :"\n\nIt's a Draw 🙅🏾!" ), dismissButton: .default(Text("OK")){
-                self.boardModel.resetGame()
+                self.boardModel.resetGame(enableNPC: self.isNPCEnable)
+                self.activePlayer = self.boardModel.activePlayer
                 })
         }
     }

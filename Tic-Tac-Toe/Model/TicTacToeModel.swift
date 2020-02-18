@@ -12,23 +12,52 @@ import Combine
 
 // MARK: - TicTacToeModel
 /// Manage the states of the board and handle the inputs from the Board View
+
 class TicTacToeModel{
     
     var board = [SquareModel]()
     var activePlayer = Player.x
+    var isNPCEnabled = false
     
     private let rowSize:Int
     
     
+    /// return the indices of `Player.empty` squares
+    ///
+    /// E.g. [.empty,.o,.x,.o,.x,.o,.x,.o,.empty] --> [0,8]
+    var emptySquares: [Int]  {
+        return self.board.indices.filter {self.board[$0].status == .empty}
+    }
+    
+    
     /// Init for TicTacToeModel
-    /// - Parameter rowSize: The size of row (E.g rowSize = 3 will build an array of 9)
+    /// - Parameter rowSize: The size of row
+    ///
+    /// (E.g rowSize = 3 will build an array of 9)
     init(rowSize: Int) {
         self.rowSize = rowSize
+        self.createBoard()
+    }
+    
+    
+    /// Init for TicTacToeModel
+    /// - Parameters:
+    ///   - rowSize: The size of row
+    ///   (E.g rowSize = 3 will build an array of 9)
+    ///   - enableAI: Set the AI, true or false when the board is created
+    init (rowSize: Int, enableAI:Bool){
+        self.rowSize = rowSize
+        self.createBoard()
+        self.isNPCEnabled = enableAI
+    }
+    
+    
+    /// Create the initial board with `Player.empty` Squares
+    private func createBoard (){
         for _ in (0 ..< self.rowSize * self.rowSize){
             board.append(SquareModel(status: .empty))
         }
     }
-    
     
     /// Reflects the input of the user in board
     /// - Parameters:
@@ -40,13 +69,14 @@ class TicTacToeModel{
             #if DEBUG
             print("✅ The Square is empty")
             #endif
+            //TODO: if is AI avoid the feedback
             let selectionFeedback = UISelectionFeedbackGenerator()
             selectionFeedback.selectionChanged()
             board[index].status = player
             #if DEBUG
             print("◻️ Square: \(index) set to: \(board[index].status)")
-            #endif
             self.changePlayer()
+            #endif
         }else{
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.error)
@@ -57,10 +87,31 @@ class TicTacToeModel{
     }
     
     
-    /// Resets all the squares of the board to Player.empty
-    func resetGame() {
+    /// Select a random `.empty` Square
+    /// - Parameter player: The player we select as NPC player
+    func makeNPCMove(player: Player) {
+        if self.isNPCEnabled {
+            //Select a random empty Square
+            #if DEBUG
+            print("\(emptySquares)")
+            #endif
+            let selectedSquare = Int.random(in: 0..<emptySquares.count)
+            self.makeMove(index: emptySquares[selectedSquare], player: player)
+        }
+    }
+    
+    
+    /// Resets all the squares of the board to `Player.empty`
+    func resetGame(enableNPC:Bool) {
+        self.isNPCEnabled = enableNPC
+        
         for n in (0 ..< self.rowSize * self.rowSize){
             board[n].status = .empty
+        }
+        
+        //or reset the active player to X
+        if isNPCEnabled && self.activePlayer == .o {
+            makeNPCMove(player: .o)
         }
     }
     
