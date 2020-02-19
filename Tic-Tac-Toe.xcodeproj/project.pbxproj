@@ -15,6 +15,7 @@
 		FD0DEDA423EC836100DE5C57 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD0DEDA323EC836100DE5C57 /* Preview Assets.xcassets */; };
 		FD0DEDA723EC836100DE5C57 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FD0DEDA523EC836100DE5C57 /* LaunchScreen.storyboard */; };
 		FD0DEDB223EC836100DE5C57 /* Tic_Tac_ToeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0DEDB123EC836100DE5C57 /* Tic_Tac_ToeTests.swift */; };
+		FD0F70B723FC6BBF002522D2 /* GameOverPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0F70B623FC6BBF002522D2 /* GameOverPopupView.swift */; };
 		FD9B50F123F3475B00035AF2 /* SquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9B50F023F3475A00035AF2 /* SquareView.swift */; };
 		FDCC321923EF9A8900367F88 /* JosefinSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDCC320F23EF9A8900367F88 /* JosefinSans-Regular.ttf */; };
 		FDCC321D23EF9A8900367F88 /* JosefinSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDCC321323EF9A8900367F88 /* JosefinSans-SemiBold.ttf */; };
@@ -49,6 +50,7 @@
 		FD0DEDAD23EC836100DE5C57 /* Tic-Tac-ToeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tic-Tac-ToeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0DEDB123EC836100DE5C57 /* Tic_Tac_ToeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tic_Tac_ToeTests.swift; sourceTree = "<group>"; };
 		FD0DEDB323EC836100DE5C57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FD0F70B623FC6BBF002522D2 /* GameOverPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverPopupView.swift; sourceTree = "<group>"; };
 		FD9B50F023F3475A00035AF2 /* SquareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareView.swift; sourceTree = "<group>"; };
 		FD9B512023F35F2600035AF2 /* Tic-Tac-Toe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Tic-Tac-Toe.entitlements"; sourceTree = "<group>"; };
 		FDCC320F23EF9A8900367F88 /* JosefinSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JosefinSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				FD08949923EF869200590376 /* BoardView.swift */,
 				FDCC322223EFA70800367F88 /* CurrentPlayerView.swift */,
 				FD9B50F023F3475A00035AF2 /* SquareView.swift */,
+				FD0F70B623FC6BBF002522D2 /* GameOverPopupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				FD9B50F123F3475B00035AF2 /* SquareView.swift in Sources */,
 				FD08949A23EF869200590376 /* BoardView.swift in Sources */,
 				FDCC322123EFA42B00367F88 /* TicTacToeModel.swift in Sources */,
+				FD0F70B723FC6BBF002522D2 /* GameOverPopupView.swift in Sources */,
 				FD0DED9F23EC835800DE5C57 /* ContentView.swift in Sources */,
 				FDCC322723EFAFA600367F88 /* TitleView.swift in Sources */,
 				FDCC322E23F1266700367F88 /* Definitions.swift in Sources */,

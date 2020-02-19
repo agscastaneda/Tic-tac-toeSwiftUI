@@ -69,9 +69,8 @@ class TicTacToeModel{
             #if DEBUG
             print("✅ The Square is empty")
             #endif
-            //TODO: if is AI avoid the feedback
-            let selectionFeedback = UISelectionFeedbackGenerator()
-            selectionFeedback.selectionChanged()
+             let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                           impactMed.impactOccurred()
             board[index].status = player
             #if DEBUG
             print("◻️ Square: \(index) set to: \(board[index].status)")
@@ -135,6 +134,8 @@ class TicTacToeModel{
         let isAwinner = checkForWinner().isAWinner
         if isAwinner {
             let winner = checkForWinner().player
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.warning)
             return (isAwinner, winner)
         }else{
             let gameState = board.compactMap({$0.status})
@@ -143,6 +144,8 @@ class TicTacToeModel{
                 #if DEBUG
                 print("🙅🏾 Draw!!!")
                 #endif
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.warning)
                 return (true,Player.empty)
             }
         }

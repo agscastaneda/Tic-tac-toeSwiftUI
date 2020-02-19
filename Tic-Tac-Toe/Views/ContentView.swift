@@ -14,6 +14,7 @@ struct ContentView: View {
     
     @State var boardModel = TicTacToeModel(rowSize: Definitions().lines, enableAI: true) // Here we create the board
     @State private var isGameOver = false
+    @State private var winner = Player.empty
     @State var activePlayer = Player.x
     @State var isNPCEnable = true
     
@@ -25,13 +26,12 @@ struct ContentView: View {
         self.boardModel.makeMove(index: index, player: self.boardModel.activePlayer)
         
         self.isGameOver = self.boardModel.isGameOver().isGameOver
+        self.winner = self.boardModel.isGameOver().winner
         
-        if(!self.isGameOver && self.boardModel.activePlayer == .o){
+        if(!self.isGameOver && self.isNPCEnable && self.boardModel.activePlayer == .o){
             self.boardModel.makeNPCMove(player: .o)
             self.isGameOver = self.boardModel.isGameOver().isGameOver
-        }else{
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.warning)
+            self.winner = self.boardModel.isGameOver().winner
         }
         self.activePlayer = self.boardModel.activePlayer
     }
@@ -49,8 +49,10 @@ struct ContentView: View {
                             ForEach(0..<Definitions().lines) { col in
                                 ZStack{
                                     SquareView (source: self.boardModel.board[self.getIndex(row: row, col: col)]){
-                                        let index = self.getIndex(row: row, col: col)
-                                        self.squareAction(index: index)
+                                        if !self.isGameOver {
+                                            let index = self.getIndex(row: row, col: col)
+                                            self.squareAction(index: index)
+                                        }
                                     }
                                 }
                             }
@@ -58,6 +60,12 @@ struct ContentView: View {
                     }
                 }.aspectRatio(1, contentMode: .fit)
                     .padding(20)
+                GameOverPopupView(showPopup: $isGameOver, winner:$winner){
+                    self.boardModel.resetGame(enableNPC: self.isNPCEnable)
+                    self.activePlayer = self.boardModel.activePlayer
+                }
+                .transition(.asymmetric(insertion: .scale, removal: .opacity))
+                
             }
             CurrentPlayerView(currentPlayer: SquareModel(status: self.activePlayer))
             Spacer()
@@ -81,6 +89,7 @@ struct ContentView: View {
                         .fontWeight(.heavy)
                         .padding(.horizontal)
                 }
+                Divider()
                 Button(action: {
                     self.isNPCEnable = true
                     self.boardModel.resetGame(enableNPC:  self.isNPCEnable)
@@ -91,18 +100,12 @@ struct ContentView: View {
                         .fontWeight(.heavy)
                         .padding(.horizontal)
                 }
-            }
+            }.frame(maxHeight: 30)
             
             Spacer()
         }.padding(.horizontal)
             .onAppear{
                 self.activePlayer = self.boardModel.activePlayer
-        }
-        .alert(isPresented: $isGameOver) {
-            Alert(title: Text("Game Over"), message: Text(self.boardModel.isGameOver().winner != Player.empty ? "\n\nPlayer \(self.boardModel.isGameOver().winner.string) Wins!" :"\n\nIt's a Draw 🙅🏾!" ), dismissButton: .default(Text("OK")){
-                self.boardModel.resetGame(enableNPC: self.isNPCEnable)
-                self.activePlayer = self.boardModel.activePlayer
-                })
         }
     }
 }
