@@ -74,8 +74,8 @@ class TicTacToeModel{
             board[index].status = player
             #if DEBUG
             print("◻️ Square: \(index) set to: \(board[index].status)")
-            self.changePlayer()
             #endif
+            self.changePlayer()
         }else{
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.error)
